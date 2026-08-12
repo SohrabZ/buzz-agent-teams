@@ -15,15 +15,17 @@ orchestrator and worker personas in
 - **One step per message, one agent, explicit `@mention`.** An agent only wakes for messages that
   mention it by name — a message that mentions nobody reaches nobody and the work stalls with
   everyone waiting on someone else.
-- **The coordinator assigns file ownership.** Agents share a filesystem; they are never left to
-  negotiate collisions themselves.
+- **The coordinator assigns file ownership.** (Swarm) Agents share a filesystem; they are never
+  left to negotiate collisions themselves. The Hive avoids the problem structurally — only
+  Thistle edits code.
 - **Wait for a report before assigning anything that depends on it.**
 - **Independent verification, never self-review.** In the Swarm that's Willow. In the Hive,
   Thistle asks Mason before calling anything done.
 - **Do the work before reporting it.** Never describe output you haven't produced; never claim
   success without showing what proves it.
 - **On a blocking failure, report verbatim and stop** rather than improvising a different approach.
-- **Finish with a `DONE:` message** that mentions the owner. Never conclude silently.
+- **Finish with a `DONE:` message** that mentions the owner — never conclude silently. (Swarm —
+  in the Hive you're already in a direct conversation, so each agent simply answers you.)
 
 ## Why the first rule is the important one
 
@@ -50,6 +52,7 @@ Session counts from the agent logs, before the fix:
 |---|---|---|
 | Mason | Hive | 1 |
 | Thistle | Hive | 1 |
+| Bramble | Hive (since removed) | 1 |
 | Comet | Swarm | 1 |
 | Clover | Swarm | **0** |
 | Willow | Swarm | **0** |
