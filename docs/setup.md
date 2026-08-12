@@ -2,29 +2,30 @@
 
 [← README](../README.md)
 
-## 1. Fill in the placeholders
+## Prerequisites
 
-The snapshots ship with three placeholders. Replace them **before** importing.
+- **Buzz Desktop**, signed in to a relay you own or belong to
+- A working **`claude` CLI** — both teams use the Claude Code runtime. Buzz talks to it through a
+  bundled ACP adapter, so you don't install that separately, but `claude` itself must be
+  authenticated.
 
-| Placeholder | Replace with |
-|---|---|
-| `OWNER` | Your display name, as the agents should address you |
-| `HIVE_CHANNEL_ID` | The channel UUID the Hive lives in |
-| `SWARM_CHANNEL_ID` | The channel UUID the Swarm lives in |
+To run a different runtime, change `"runtime"` in each member of the `.team.json` before importing.
+Valid ids come from Buzz's
+[runtime catalog](https://github.com/block/buzz/blob/main/desktop/src-tauri/src/managed_agents/discovery.rs):
+`claude`, `codex`, `goose`, `cursor`, `kimi`, `opencode`, and others.
 
-Create a channel per team first, then get the UUIDs:
+## 1. Fill in the placeholder
+
+`OWNER` is the only one. It's how agents address you and who they escalate to.
 
 ```bash
-buzz channels list
+sed -i '' 's/OWNER/Ada/g' teams/*.team.json      # Linux: sed -i 's/OWNER/Ada/g'
 ```
 
-```bash
-sed -i '' 's/OWNER/Ada/; s/HIVE_CHANNEL_ID/<uuid>/'  teams/hive.team.json
-sed -i '' 's/OWNER/Ada/; s/SWARM_CHANNEL_ID/<uuid>/' teams/swarm.team.json
-```
-
-The channel UUID is baked into each coordinator's system prompt. **If you recreate a channel,
-update the prompt** — see [editing agents in place](#editing-agents-that-already-exist).
+> **Channel IDs are not needed.** Agents discover the channels they belong to at startup — the
+> logs show `discovered N channel(s)` before any prompt is read. If you want a coordinator to
+> reference its channel explicitly you can add `Your channel is <uuid>.` to its prompt, but it
+> then goes stale if you ever recreate that channel, so it isn't the default here.
 
 ## 2. Import
 
@@ -37,9 +38,20 @@ and writes the agents into `managed-agents.json` plus a team record in `teams.js
 ~/Library/Application Support/xyz.block.buzz.app/agents/     # macOS
 ```
 
-Put each team's agents in its own channel. They only see channels they're a member of.
+## 3. Give each team a channel
 
-## 3. Apply the model tiers
+Create a channel per team, then add the matching team to it from the Agents page. Agents only
+receive events from channels they belong to — their startup log line is the check:
+
+```
+discovered 1 channel(s)
+subscribed to channel 00000000-0000-0000-0000-000000000000
+```
+
+**One team per channel.** Two coordinators in one channel means every assignment is visible to
+both, and a worker can be woken by the wrong one.
+
+## 4. Apply the model tiers
 
 ```bash
 ./scripts/apply-tiers.sh --dry     # preview
@@ -62,7 +74,7 @@ This is a separate step because `env_vars` is deliberately excluded from team sn
 carry secrets), so the tiering can't ride along in the import. See
 [field notes](field-notes.md#env_vars-is-excluded-from-snapshots-by-design).
 
-## Choosing `respondTo`
+## 5. Choosing `respondTo`
 
 Every member ships as `respondTo: "anyone"`. This is required: the whole design is agents
 `@`-mentioning each other, and `owner-only` means an agent ignores everything not from you — a

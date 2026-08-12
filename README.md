@@ -1,7 +1,8 @@
-# buzz-agent-teams
+# Hive & Swarm — agent teams for Buzz
 
-Two ready-to-import agent teams for [Buzz](https://github.com/block/buzz) — a standing **Hive**
-and a disposable **Swarm** — plus a benchmark task for comparing them.
+Two ready-to-import teams for [Buzz](https://github.com/block/buzz): a standing **Hive** for
+ongoing engineering, and a disposable **Swarm** for bounded, repetitive work. Plus a benchmark
+task for comparing them.
 
 Built following Block's [Effective teams of agents](https://engineering.block.xyz/blog/effective-teams-buzz),
 with prompts written against Block's own reference personas in
@@ -54,18 +55,64 @@ multiply the same mistake.
 
 ## Quick start
 
+You need [Buzz Desktop](https://github.com/block/buzz) installed and signed in to a relay, and a
+working `claude` CLI (the teams run on the Claude Code runtime).
+
+**1. Get the files**
+
 ```bash
-# 1. Create a channel per team in Buzz, then fill in the placeholders
-sed -i '' 's/OWNER/Ada/; s/HIVE_CHANNEL_ID/<uuid>/'  teams/hive.team.json
-sed -i '' 's/OWNER/Ada/; s/SWARM_CHANNEL_ID/<uuid>/' teams/swarm.team.json
-
-# 2. Buzz Desktop → Agents → Agent teams → + → import each .team.json
-
-# 3. Quit Buzz, then apply the model tiers
-./scripts/apply-tiers.sh
+git clone https://github.com/SohrabZ/buzz-agent-teams.git
+cd buzz-agent-teams
 ```
 
-Full walkthrough in **[docs/setup.md](docs/setup.md)**.
+Or grab just the two snapshots:
+
+```bash
+curl -O https://raw.githubusercontent.com/SohrabZ/buzz-agent-teams/main/teams/hive.team.json
+curl -O https://raw.githubusercontent.com/SohrabZ/buzz-agent-teams/main/teams/swarm.team.json
+```
+
+**2. Put your name in**
+
+`OWNER` is the only placeholder — it's how the agents address you and who they escalate to.
+
+```bash
+sed -i '' 's/OWNER/Ada/g' teams/*.team.json      # Linux: sed -i 's/OWNER/Ada/g'
+```
+
+**3. Import**
+
+Buzz Desktop → **Agents** → under *Agent teams* click **+** → import `teams/hive.team.json`.
+Repeat for `swarm.team.json`. Each import mints a fresh keypair per agent.
+
+**4. Give each team a channel**
+
+Create a channel per team — say `#hive` and `#swarm` — then add the matching team to it. Keep them
+apart: agents only see channels they belong to, and one team per channel keeps the mention
+discipline clean.
+
+**5. Set the model tiers** *(optional, recommended)*
+
+```bash
+./scripts/apply-tiers.sh          # --dry to preview first
+```
+
+**Quit Buzz before running this** — it rewrites its store on exit. This is what sets each agent's
+effort level; nothing else does.
+
+**6. Start the agents and say hello**
+
+Start each agent from the Agents page, then in `#hive`:
+
+```
+@Mason read the repo at <path> and tell me what you'd change first.
+```
+
+Talk to the **coordinator** — `@Mason` or `@Comet` — never to a worker directly. The coordinator
+decides whether the work needs splitting and who takes what.
+
+Full walkthrough, including how to verify the coordinator is actually delegating, in
+**[docs/setup.md](docs/setup.md)**.
 
 ## Docs
 

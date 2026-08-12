@@ -37,7 +37,7 @@ members. Duplicate agent names are worth cleaning up for exactly that reason.
 ## `respondTo: owner-only` breaks agent-to-agent work
 
 It means the agent ignores everything not from you, so a worker can never reach its coordinator.
-Every member here ships as `anyone`. See [setup](setup.md#choosing-respondto) for the tradeoff and
+Every member here ships as `anyone`. See [setup](setup.md#5-choosing-respondto) for the tradeoff and
 how to tighten it.
 
 ## The `model` field does reach the runtime
