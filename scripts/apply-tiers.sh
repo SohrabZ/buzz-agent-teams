@@ -36,7 +36,7 @@ read -r -d '' TIERS <<'EOF' || true
 Mason    claude-opus-5                medium
 Comet    claude-opus-5                medium
 Thistle  claude-sonnet-5              high
-Bramble  claude-sonnet-5              high
+Pollen   claude-haiku-4-5-20251001    high
 Clover   claude-sonnet-5              high
 Nectar   claude-sonnet-5              high
 Amber    claude-sonnet-5              high
@@ -46,7 +46,7 @@ Meadow   claude-sonnet-5              high
 Waxwing  claude-sonnet-5              high
 Juniper  claude-sonnet-5              high
 Sage     claude-sonnet-5              high
-Willow   claude-haiku-4-5-20251001    xhigh
+Willow   claude-haiku-4-5-20251001    high
 EOF
 
 # Build a jq object: {"Mason": {"ANTHROPIC_MODEL": "...", "CLAUDE_CODE_EFFORT_LEVEL": "..."}, ...}

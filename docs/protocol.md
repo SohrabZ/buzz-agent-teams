@@ -2,20 +2,24 @@
 
 [← README](../README.md)
 
-Both teams run the same rules, taken from Block's reference orchestrator and worker personas in
+The teams differ in topology — the Hive is a flat trio you address directly; the Swarm is a
+coordinator hierarchy — but both run the same working rules, taken from Block's reference
+orchestrator and worker personas in
 [`benchmarks/harbor-buzz-orchestra`](https://github.com/block/buzz/tree/main/benchmarks/harbor-buzz-orchestra).
 
 ## The rules
 
-- **Coordinators do not do the work.** They read to decide, then assign.
+- **Coordinators do not do the work.** They read to decide, then assign. (Swarm — the Hive has
+  no coordinator; the parallel rule there is that each agent stays in its own job: Mason judges
+  but never builds, Pollen runs but never fixes.)
 - **One step per message, one agent, explicit `@mention`.** An agent only wakes for messages that
   mention it by name — a message that mentions nobody reaches nobody and the work stalls with
   everyone waiting on someone else.
 - **The coordinator assigns file ownership.** Agents share a filesystem; they are never left to
   negotiate collisions themselves.
 - **Wait for a report before assigning anything that depends on it.**
-- **Independent verification, never self-review.** In the Swarm that's Willow. In the Hive the two
-  WorkerBees check each other.
+- **Independent verification, never self-review.** In the Swarm that's Willow. In the Hive,
+  Thistle asks Mason before calling anything done.
 - **Do the work before reporting it.** Never describe output you haven't produced; never claim
   success without showing what proves it.
 - **On a blocking failure, report verbatim and stop** rather than improvising a different approach.
@@ -31,10 +35,14 @@ An earlier version of these prompts told the Swarm coordinator:
 That sounds reasonable — you can't rule on edge cases you've never met. But it has **no stopping
 condition**. "One unit" doesn't end anywhere, so the coordinator worked until the task was done.
 
-The Hive, whose coordinator was told the opposite — *keep your own turns for judgment, hand the
-doing to a WorkerBee* — delegated correctly on the same day, against the same relay, with the same
-duplicate agent records. That's what isolated the cause. It wasn't the mention plumbing and it
-wasn't Buzz; it was one line of prompt.
+A second team run the same day — whose coordinator was told the opposite, *keep your own turns
+for judgment, hand the doing to a WorkerBee* — delegated correctly, against the same relay, with
+the same duplicate agent records. That's what isolated the cause. It wasn't the mention plumbing
+and it wasn't Buzz; it was one line of prompt.
+
+(That second team was an earlier, coordinator-shaped version of the Hive. The Hive has since been
+reshaped to the article's flat topology — see the README — which is why its current prompts have
+no coordinator at all. The lesson carries over to Comet unchanged.)
 
 Session counts from the agent logs, before the fix:
 
@@ -42,7 +50,6 @@ Session counts from the agent logs, before the fix:
 |---|---|---|
 | Mason | Hive | 1 |
 | Thistle | Hive | 1 |
-| Bramble | Hive | 1 |
 | Comet | Swarm | 1 |
 | Clover | Swarm | **0** |
 | Willow | Swarm | **0** |
@@ -76,9 +83,10 @@ with no CLI involved.
 So these prompts keep the mention discipline, which is the transferable part, and drop the CLI
 mechanics, which would risk double-posting here.
 
-## What each coordinator escalates
+## What gets escalated to you
 
-Both are told to absorb everything they can and bring you only what's genuinely new.
+Comet — and each Hive agent individually — is told to absorb everything it can and bring you only
+what's genuinely new.
 
 | Coordinator resolves | Owner decides |
 |---|---|

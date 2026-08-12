@@ -10,12 +10,14 @@ with prompts written against Block's own reference personas in
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="diagrams/hive-vs-swarm.dark.svg">
-  <img alt="Hive and Swarm team shapes side by side" src="diagrams/hive-vs-swarm.light.svg" width="680">
+  <img alt="Hive and Swarm team topologies" src="diagrams/hive-vs-swarm.light.svg" width="680">
 </picture>
 
-The structural difference is the dashed **verification path**. The Hive has two peers who check
-each other. The Swarm is an assembly line with a dedicated verifier whose verdict loops back to
-the coordinator, who folds it into the rulebook before assigning the next batch.
+The structural difference is the topology. In the **Hive** you talk to each agent directly — no
+coordinator — and each one accumulates a different slice of memory about you. In the **Swarm** you
+talk only to the coordinator, which fans work out to a clonable worker pool and an independent
+verifier; escalation runs back up the chain and stops there, so only genuinely new edge cases
+reach you.
 
 ## Which team for which work
 
@@ -34,24 +36,24 @@ on short work — the article's +33% figure is for long-horizon work only.
 
 ## The rosters
 
-**Hive** — one SmartBee and two WorkerBees, the exact shape the article benchmarked. No dedicated
-verifier; Mason routes each WorkerBee's output to the other, so nobody reviews their own work.
+**Hive** — one agent per tier, one job and one memory slice each. You address each directly;
+handoffs between them are peer-to-peer, not assigned.
 
-| Agent | Tier | Model | Job |
-|---|---|---|---|
-| Mason | SmartBee | Opus 5 | Coordinates. Decides, assigns, reviews. **Does not implement.** |
-| Thistle | WorkerBee | Sonnet 5 | Implements subtasks end to end. |
-| Bramble | WorkerBee | Sonnet 5 | Second lane — and verifies Thistle, and vice versa. |
+| Agent | Tier | Model | Job | Remembers |
+|---|---|---|---|---|
+| Mason | SmartBee | Opus 5 | Reviews and judges | Your review bar — what gets waved off, what gets sent back |
+| Thistle | WorkerBee | Sonnet 5 | Designs and builds | How you work — conventions, preferences, patterns |
+| Pollen | QuickBee | Haiku 4.5 | Runs the legwork | The boring facts — build commands, test flags, log paths |
 
-**Swarm** — a coordinator who owns an edge-case rulebook, a clonable worker, and a verifier.
-Starting with one worker is deliberate: extra workers before the pattern is established just
-multiply the same mistake.
+**Swarm** — one coordinator, a worker pool of 1–10, one verifier. Ships with a single worker —
+a deliberate starting point, not a limit: extra workers before the pattern is established just
+multiply the same mistake. Comet asks for clones once the rulebook holds.
 
 | Agent | Tier | Model | Job |
 |---|---|---|---|
 | Comet | SmartBee | Opus 5 | Owns the work list and the **rulebook**. **Does not migrate.** |
-| Clover | WorkerBee | Sonnet 5 | Applies the established pattern, batch by batch. |
-| Willow | QuickBee | Haiku 4.5 | Verifies every batch. Pass or fail, no maybe. |
+| 1–10 × Clover | WorkerBee | Sonnet 5 | Parallel migrators — apply the established pattern. |
+| Willow | QuickBee | Haiku 4.5 | Independent verifier. Pass or fail, no maybe. |
 
 ## Quick start
 
@@ -108,8 +110,9 @@ Start each agent from the Agents page, then in `#hive`:
 @Mason read the repo at <path> and tell me what you'd change first.
 ```
 
-Talk to the **coordinator** — `@Mason` or `@Comet` — never to a worker directly. The coordinator
-decides whether the work needs splitting and who takes what.
+In the Hive, talk to whichever agent owns the job — `@Mason` to review, `@Thistle` to build,
+`@Pollen` for legwork. In the Swarm, talk **only** to `@Comet`: the coordinator decides who takes
+what, and going around it breaks the rulebook loop.
 
 Full walkthrough, including how to verify the coordinator is actually delegating, in
 **[docs/setup.md](docs/setup.md)**.

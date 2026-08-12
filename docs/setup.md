@@ -65,7 +65,7 @@ both, and a worker can be woken by the wrong one.
 |---|---|---|
 | SmartBee | `claude-opus-5` | `medium` |
 | WorkerBee | `claude-sonnet-5` | `high` |
-| QuickBee | `claude-haiku-4-5-20251001` | `xhigh` |
+| QuickBee | `claude-haiku-4-5-20251001` | `high` |
 
 Effort runs *inverse* to model strength, per the article — cheaper models get pushed harder to
 compensate.
@@ -114,7 +114,7 @@ A="$HOME/Library/Application Support/xyz.block.buzz.app/agents"; jq -r '.[]|sele
 ```
 Mason      1 sessions
 Thistle    1 sessions
-Bramble    1 sessions
+Pollen     1 sessions
 Comet      1 sessions
 Clover     0 sessions      ← never woken
 Willow     0 sessions      ← never woken

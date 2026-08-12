@@ -25,6 +25,9 @@ hand it `BRIEF.md`:
 > Work in `~/bench-hive`. Read `BRIEF.md` and complete it. Post the `npm run score` output when
 > you're done.
 
+Address it to `@Comet` in the Swarm channel. In the Hive there is no coordinator — hand it to
+`@Thistle` (building is Thistle's job) and let the team pull in Mason and Pollen as peers.
+
 ## The task
 
 `ledger-toolkit` is a small library whose database driver is dropping its deprecated callback API.
