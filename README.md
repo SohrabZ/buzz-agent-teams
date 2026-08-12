@@ -125,11 +125,13 @@ Full walkthrough, including how to verify the coordinator is actually delegating
 | **[Protocol](docs/protocol.md)** | The rules both teams run — and the coordinator bug that made them necessary |
 | **[Benchmark](docs/benchmark.md)** | A zero-dependency migration task for comparing the two teams |
 | **[Field notes](docs/field-notes.md)** | Buzz internals that cost time to work out, plus the full reference list |
+| **[Architectures](docs/architectures.md)** | The teams mapped onto LangChain's four multi-agent patterns — and the one Buzz can't express |
 
 ## Repo layout
 
 ```
 teams/       importable buzz-team-snapshot v1 files
+skills/      loadable SKILL.md procedures + install.sh
 scripts/     apply-tiers.sh — per-agent model + effort
 diagrams/    light + dark SVG, and the generator that builds both
 benchmark/   generate.sh and the task brief
