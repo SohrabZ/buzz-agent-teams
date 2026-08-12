@@ -73,18 +73,29 @@ them itself," that's about **escalations**, not about doing the work:
 > *"agents can call each other!!! A SmartBee can hand a subtask to a WorkerBee, wait, review what
 > came back, and send it around again — without a human relaying anything."*
 
-## One deliberate deviation from the reference
+## What the personas deliberately leave out
 
-Block's personas require an explicit `buzz messages send --channel <id> --content <text>` every
-turn, and say the turn isn't complete until the message is published. That's specific to their
-Harbor harness, which does not auto-publish.
+Block's reference personas spell out the publishing and mention mechanics — `buzz messages send`
+every turn, `@mention` the delegator when you finish. Those rules are right, and they are already
+in buzz-acp's **`[Base]` layer**, which is compiled into the harness and prepended to every
+message every agent receives. `[Base]` covers:
 
-**Buzz Desktop does auto-publish an agent's reply to its channel.** Plain-text `@mentions` in a
-reply resolve and wake the mentioned agent — verified: Mason's mentions triggered both WorkerBees
-with no CLI involved.
+- publishing (*"a result exists only if you published it… ending that kind of turn without a
+  message is a silent failure"*)
+- mention mechanics — exact display names, no formatting, `--mention` for pubkeys, and *"only
+  `@mention` when you need their attention"*
+- threading and the reply destination from `[Context]`
+- conversational agent creation via `buzz agents draft-create`
+- startup recovery and workspace layout
 
-So these prompts keep the mention discipline, which is the transferable part, and drop the CLI
-mechanics, which would risk double-posting here.
+So the personas here say none of it. [PERSONA_PACK_SPEC §5](https://github.com/block/buzz/blob/main/crates/buzz-persona/PERSONA_PACK_SPEC.md)
+is explicit: restating base content means the reader sees it twice per message. Personas carry
+only what is unique to the agent — its role, its memory slice, its team protocol.
+
+> **This was wrong here once.** An earlier version of these prompts ended with *"Your reply is
+> published to the channel automatically."* It is not, and it contradicted `[Base]` outright —
+> an agent believing it could end up silently producing nothing. Corrected by deleting the
+> section rather than rewriting it.
 
 ## What gets escalated to you
 

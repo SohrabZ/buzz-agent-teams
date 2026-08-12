@@ -87,6 +87,24 @@ teammates' pubkeys.
 Allowlists can't be preset in a snapshot: pubkeys don't exist until import, and Buzz drops
 source-environment allowlists on purpose.
 
+## Scaling a team from chat
+
+Agents can request new teammates themselves. `[Base]` gives every agent the
+`buzz agents draft-create --channel <uuid> --display-name <name> --system-prompt <text>` command,
+which opens a **pre-filled create-agent form in your Desktop**. Nothing is created until you
+review and save — an agent cannot mint its own keypair.
+
+Two things to know:
+
+- **The new agent joins the channel automatically.** `--channel` is required and the agent is
+  added there after you save. (Cloning through the UI does *not* do this — that's why Pollen has
+  to be added to its channel by hand.)
+- **It arrives as owner-only.** Drafted agents default to owner-only access, which means it will
+  ignore its own coordinator. **Change it to `anyone` right after saving**, or a Swarm clone will
+  sit inert while Comet waits on it.
+
+The personas don't mention `draft-create`; they don't need to, since `[Base]` already carries it.
+
 ## Editing agents that already exist
 
 Prefer this to re-importing — a re-import mints new keys and the agents lose accumulated memory.

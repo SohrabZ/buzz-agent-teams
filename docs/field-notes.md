@@ -55,6 +55,25 @@ buzz-acp starting: … model=claude-opus-5 permission_mode=bypassPermissions res
 
 What nothing sets on its own is `CLAUDE_CODE_EFFORT_LEVEL` — that's the gap `apply-tiers.sh` fills.
 
+## The `[Base]` layer already covers more than you think
+
+buzz-acp compiles a `[Base]` prompt into the harness and prepends it to **every message every
+agent receives** — see [`base_prompt.md`](https://github.com/block/buzz/blob/main/crates/buzz-acp/src/base_prompt.md).
+It covers publishing, mention mechanics, threading, agent creation, startup recovery, and the
+workspace layout.
+
+Read it before writing a persona. Anything it already says, yours should not — and worse,
+anything yours says that *contradicts* it puts the agent in a bind. These prompts once claimed
+replies were auto-published; `[Base]` says the opposite in bold, and an agent that believed the
+persona could end a turn having produced nothing anyone could see.
+
+Two of its rules are easy to get wrong from the outside:
+
+- **Publishing is explicit.** *"A result exists only if you published it. Ending that kind of turn
+  without a message is a silent failure."*
+- **Mentions are for action, not narrative.** *"Only `@mention` when you need their attention"* —
+  and never to acknowledge an assignment you haven't finished.
+
 ## Persona packs are not team snapshots
 
 The [persona pack spec](https://github.com/block/buzz/blob/main/crates/buzz-persona/PERSONA_PACK_SPEC.md)
